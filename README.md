@@ -1,4 +1,10 @@
-# Getting Started with Create React App
+## Some notes:
+  * Make sure to install dependencies w/ "npm install package.json"
+  * Before running the app, make sure to get the server running and operational w/ by typing "cd src", then "nodemon server.js".
+ 
+  If you see "Example app listening at http://localhost:3001" in the terminal, you're good to go! Happy developing!
+   
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
