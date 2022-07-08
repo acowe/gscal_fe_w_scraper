@@ -1,0 +1,645 @@
+@font-face {
+    font-family: 'Anonymous Pro'; /*a name to be used later*/
+    src: url('https://domain.com/fonts/font.ttf'); /*URL to font*/
+}
+
+.gscal{
+    height: 105vh;
+    font-family: 'Anonymous Pro',"Courier New";
+    background-color: #192020;
+}
+
+.gscal .darkMode_true .container-fluid{
+    background-color: #192020;
+}
+
+
+.sidebar_true{
+    position: fixed;
+}
+
+.header{
+    background-color: #47C6C4;
+    font-size: large;
+    overflow-y: visible;
+}
+
+.header a:hover{
+    color: #057a77;
+    cursor: pointer;
+}
+
+.btn-light{
+    background-color: white;
+    color: #057a77;
+}
+
+.btn-light:hover{
+    background-color: #f1f1f1;
+    font-weight: 500;
+    color: #05736e;
+}
+
+.h_other{
+    padding-top: .2rem;
+}
+
+.h_other_text{
+    font-weight: 500;
+    color: #057a77;
+}
+
+
+
+@media (max-width: 770px) {
+    .h_other_text{
+        display: none;
+    }
+
+    .h_dropdown{
+        background-color: white;
+        color: #07A2A1;
+        border-radius: 5px;
+    }
+
+    .h_title{
+        padding-top: 0.4rem;
+    }
+
+}
+
+@media (min-width: 771px) {
+    .h_other_text{
+        font-weight: 500;
+        color: #057a77;
+    }
+    .h_dropdown{
+        display: none;
+    }
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+
+.contents{
+    height: 100%;
+    background-color: #192020;
+}
+
+.cal_col{
+    background-color: #192020;
+}
+
+.cal_card{
+    max-width: 100%;
+    background-color: white;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 10px;
+    box-shadow: 15px 15px 20px #057a77;
+
+}
+
+.cal_head{
+    text-align: left;
+    padding-left: 1.3rem;
+    padding-top: 2rem;
+    padding-bottom: 0.4rem;
+    background-color: #07A2A1;
+    color: white;
+    border-radius: 10px;
+    font-size: 3.5rem;
+}
+
+.container, .container-sm{
+    max-width: 100%;
+}
+
+.cal{
+    border-style: solid;
+    border-width: 2px;
+    border-color: #07A2A1;
+
+}
+
+@media (min-width: 1170px){
+    .dow_short{
+        display:none;
+    }
+}
+
+@media (min-width:991px) and (max-width: 1169px){
+    .dow_full{
+        display: none;
+    }
+}
+
+
+@media (min-width: 768px) and (max-width: 990px){
+    .dow_short{
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .dow_full{
+        display: none;
+    }
+}
+
+
+
+@media (max-width:576px){
+    .cal_card{
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .cal_head{
+        padding-left: .75rem;
+        padding-top: 1rem;
+        padding-bottom: 0.2rem;
+        margin-bottom: 0rem;
+        font-size: 2.5rem;
+
+    }
+}
+
+.cal_days{
+    letter-spacing: .02rem;
+    font-weight: bold;
+    color: #07A2A1;
+    margin-bottom: 0.1rem;
+
+}
+
+.cal_wk_fst{
+    border-top-style: none;
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color: #07A2A1;
+    max-height: 100px;
+    min-height: 90px;
+    overflow: hidden;
+}
+
+.cal_wk{
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color: #07A2A1;
+    max-height: 100px;
+    min-height: 90px;
+    overflow: hidden;
+}
+
+.cal_wk_last{
+    max-height: 100px;
+    min-height: 90px;
+    overflow: hidden;
+
+}
+
+
+.cal_sun{
+    border-right-style: solid;
+    border-width: 1px;
+    border-color: #07A2A1;
+    aspect-ratio: 1;
+}
+
+.cal_wkday{
+    border-right-style: solid;
+    border-left-style: solid;
+    border-width: 1px;
+    border-color: #07A2A1;
+    aspect-ratio: 1;
+}
+
+.cal_sat{
+    border-left-style: solid;
+    border-width: 1px;
+    border-color: #07A2A1;
+    aspect-ratio: 1;
+}
+
+.cal_date{
+    color: #696d6e;
+}
+
+.cal_content{
+    display: block;
+    height: 100%;
+    max-height: 100px;
+    background-color: white;
+    white-space:nowrap;
+    padding-top: 0rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.75rem;
+    overflow: scroll;
+}
+
+.cal_content ul{
+    padding-left: 0rem;
+    list-style: none;
+    max-width: 6.2rem;
+    font-size: smaller;
+    overflow-y: hidden;
+}
+
+.cal_content ul li{
+    width: 100%;
+    margin-bottom: 0.25rem;
+    font-size: small;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    overflow-x: hidden;
+}
+
+.many ul li{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+
+
+.to_do_text{
+    overflow-x: scroll;
+}
+
+@media (max-width: 625px){
+    .cal_content{
+        padding-top: 0rem;
+        padding-left: 0.3rem;
+        padding-right: 0.3rem;
+        padding-bottom: 0.3rem;
+        overflow: scroll;
+    }
+    .cal_content ul li{
+        padding-left: .5rem;
+        padding-right: .5rem;
+        padding-top: .75rem;
+    }
+
+    .to_do_text{
+        display: none;
+    }
+}
+
+.cal_key{
+    width: 100%;
+    height: 40px;
+}
+
+.key{
+    width:30%;
+    height: 100%;
+    float: left;
+}
+
+.key_text{
+    padding-top: .4rem;
+}
+
+@media (max-width: 770px){
+    .key_text{
+        padding-top: 0.4rem;
+        font-size: 1.2rem;
+    }
+}
+@media (max-width: 625px){
+    .key{
+        max-width: 100px;
+    }
+    .key_text{
+        padding-top: 0;
+        padding-left: .5rem;
+        font-size: 1.2rem;
+    }
+}
+
+
+.courses{
+    display: inline;
+    float: right;
+    background-color: white;
+    height: 100%;
+    width: 70%;
+    overflow-x: scroll;
+}
+
+
+.courses ul{
+    height:100%;
+    margin: 0;
+    padding-top: 0.4rem;
+
+}
+
+
+.courses ul li{
+    display: inline;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: large;
+}
+
+
+
+.course_1, .Chemistry{
+    text-align: center;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    background-color: #07A2A1;
+}
+
+.course_2, .Math{
+    text-align: center;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    background-color: #FF904D;
+}
+
+.course_3, .Phys{
+    text-align: center;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    background-color: #47C6C4;
+
+}
+
+.course_4, .Bio{
+    text-align: center;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    background-color: #59d7dc;
+}
+
+.course_5{
+    text-align: center;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    background-color: #b5c5c5;
+}
+
+
+.list_col{
+    background-color: #192020;
+}
+
+
+@media (min-width: 992px) {
+    .cal_col, .list_col{
+        max-height: 85%;
+    }
+}
+
+@media (max-width: 991px) {
+    .list_col{
+        height: 95%;
+    }
+}
+
+.task_card{
+    max-width: 100%;
+    height: 100%;
+    background-color: #394444;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 10px;
+    text-align: left;
+    overflow-y: hidden;
+}
+
+@media (max-width: 991px) {
+    .task_card{
+        max-height: 90%;
+    }
+}
+
+.task_card .task_card_contents{
+    height:100%;
+    overflow-y: scroll;
+}
+
+.task_card_contents::-webkit-scrollbar-track
+{
+    background-color: white;
+}
+
+.task_card_contents::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+@media (max-width: 400px){
+    .task_card_contents::-webkit-scrollbar
+    {
+        width: 0px;
+        background-color: #F5F5F5;
+    }
+}
+
+.task_card_contents::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background-color: #47C6C4;
+}
+
+@media (max-width: 400px) {
+    .task_card .task_card_contents{
+        height:100%;
+        overflow-y: scroll;
+    }
+
+
+}
+
+.task_day_entry{
+    margin-top: .8rem;
+}
+
+.task_day_list{
+    padding-left: 0;
+    list-style: none;
+    font-size: 23px;
+}
+
+.task_day_list li{
+    padding-top: .15rem;
+    padding-bottom: .1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    min-height: 4rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.task_day_list li:nth-child(odd){
+    background-color: #C4EBEA;
+}
+
+
+.list_content{
+    width: 100%;
+}
+
+.course_text{
+    float: left;
+    max-width: 40%;
+}
+
+.list_time{
+    position: relative;
+    font-size: 1.35rem;
+    color: #04A3A1;
+    height: 100%;
+    float: right;
+    width: 40%;
+    display: flex;
+
+
+}
+
+.list_time_text{
+    position: absolute;
+    height: 2rem;
+    bottom: 0;
+    right: 0;
+}
+
+.tde_bottom{
+    background-color: #04A3A1;
+    height: 3.5px;
+    width: 50%;
+}
+
+.none_type{
+    list-style: none;
+    font-size: 23px;
+    color: gray;
+}
+
+@media (min-width: 992px) {
+    .dl_button_group{
+        width: 91%;
+        margin-top: 3rem;
+        margin-right: 5rem;
+        height: auto;
+    }
+}
+
+@media (max-width: 991px) {
+    .dl_button_group{
+        background-color: #07A2A1;
+        width: 100%;
+        margin-top: 1.8rem;
+        height: auto;
+    }
+}
+
+
+
+
+
+.btn-primary{
+    width: 70%;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    border-radius: 7.5px;
+    font-size: large;
+    font-weight: bold;
+    background-color: #47C6C4;
+    border-style: none;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary{
+    border-color: #41c2c0;
+    background-color: #41c2c0;
+}
+
+
+
+.form-control:focus{
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.cover_up{
+    height: 0px;
+}
+
+
+@media (min-width: 992px){
+    .cover_up {
+        height: 90px;
+        background-color: #192020;
+    }
+}
+
+
+.sidebar_false .sidebar{
+    background-color: #F4F8F9;
+    position: fixed;
+    height: 100vh;
+    width: 25%;
+    border-right-style: solid;
+    border-width: 1px;
+    border-color: #B5C4C5;
+    transition: .4s;
+    left: -25%;
+}
+
+.sidebar_false .sidebar_other{
+    display: none;
+}
+
+.sidebar_true .sidebar{
+    background-color: #F4F8F9;
+    position: fixed;
+    height: 100vh;
+    width: 25%;
+    border-right-style: solid;
+    border-width: 1px;
+    border-color: #B5C4C5;
+    transition: .4s;
+    left: 0;
+}
+
+
+.profile_img{
+    max-width: 50%;
+    height: auto;
+}
+
+.sidebar_true .sidebar_other{
+    position: fixed;
+    right:0;
+    height: 100vh;
+    width: 75%;
+}
+
+
+.sidebar_options{
+    list-style: none;
+    padding-left: 0;
+}
+
+.d_mode_switch{
+    margin-left: 43%;
+}
