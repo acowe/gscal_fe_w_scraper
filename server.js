@@ -8,9 +8,13 @@ const app = express()
 const port = process.env.PORT || 3001
 
 
-app.use(cors({
+app.use(express.static('src'),express.static('public'),
+
+    cors({
     origin: '*'
 }));
+
+
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "build", "index.html")));
 
