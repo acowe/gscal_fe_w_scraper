@@ -3,7 +3,7 @@
   "homepage": "https://acowe.github.io/gscal_fe_w_scraper",
   "version": "0.1.0",
   "private": true,
-  "main": "server.js",
+  "main": "index.js",
   "engines": {
     "npm": "8.1.2",
     "node": "16.13.1"
