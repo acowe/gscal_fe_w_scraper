@@ -7,11 +7,8 @@ const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3001
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
- }
 
-app.use(express.static(path.join(__dirname, "build")),cors({
+app.use(cors({
     origin: '*'
 }));
 
