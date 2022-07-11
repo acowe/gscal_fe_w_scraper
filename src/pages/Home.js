@@ -101,15 +101,29 @@ function Home(){
     }
 
     async function login(user_in,pass){
-
         const user = user_in
         const password = pass
+        const element = document.getElementById("login_status_text");
+        element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
+        try{
+            const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password);
+            if (message.data == "Successfully logged in"){
+                setShow(true)
+                setStatus(true)
+            }
+            else{
+                console.log("Login failed, please try again")
+                element.innerHTML = message.data + ", please try again"
+            }
+        }
+        catch (e){
+            console.log("Login failed due to error")
+            element.innerHTML = "Login error"
+        }
         //This one logs into gradescope with the following information
-        const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password)
-        console.log(message)
 
-        setShow(true)
-        setStatus(true)
+
+
     }
 
     async function pullClasses(){
@@ -296,7 +310,7 @@ function Home(){
         return (
             <div>
                 <form className={"m-5"}>
-                    <h1 className = 'top'> Log-in Page </h1>
+                    <h1 className = 'top'> Log-in </h1>
                     <div className = 'mb-3 form-group'>
                         <h3> Username </h3>
                         <input type = 'text' className = 'form-control w-25' value = {email} placeholder='JohnDoe@gmail.com' onChange={changeEmail}></input>
@@ -307,7 +321,9 @@ function Home(){
                         <input type = 'password' className = 'form-control w-25' id = 'password' value ={pass} placeholder='pogchamp' onChange={changePass}></input>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-25" onClick={(e)=>login(email,pass)} >Submit</button>
+                    <button type="submit" className="mb-5 btn btn-primary w-25" onClick={(e)=>login(email,pass)} >Submit</button>
+
+                    <p id={"login_status_text"} className={"fs-5"}></p>
 
                 </form>
             </div>

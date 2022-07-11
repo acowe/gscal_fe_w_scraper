@@ -159,6 +159,7 @@ function TaskListEntry(props){
             <ul className={"mb-5 " + listType}>
                 {displayDueAlt}
                 {(props.assignments.length <= 0) && <li>none!</li>}
+
             </ul>
             <div className={"tde_bottom"}> </div>
         </div>

@@ -14,31 +14,10 @@ app.use(
 }));
 
 
-
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, "build", "index.html")));
-
 //Server Endpoints
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   })
-
-
-
-
-
-/*app.get('/login', async (req, res) => {
-    console.log('Starting to Login')
-    const email = req.query.email
-    const password = req.query.pass
-    const response = await altLogin("acowe", "Cowea2019!", "Harvey Mudd College")
-
-    if (response == true) {
-        res.send('Sucessfully logged in')
-    } else {
-        res.statusCode = 201
-        res.send('There was a problem logging in')
-    }
-})*/
 
 app.get('/login', async (req, res) => {
     console.log('Starting to Login')
@@ -47,17 +26,18 @@ app.get('/login', async (req, res) => {
 
     const response = await altLogin(email, password, "Harvey Mudd College")
 
-    if (response == true) {
-        res.send('Sucessfully logged in')
-    } else {
+    if (response[0] == true) {
+        res.send('Successfully logged in')
+    }
+    else {
         res.statusCode = 201
-        res.send('There was a problem logging in')
+        res.send(response[1])
     }
 })
 
-app.get('/school_login', async (req, res) => {
+/*app.get('/school_login', async (req, res) => {
     //This is the endpoint for the hopefully school-credential login
-})
+})*/
 
 app.get('/get_classes', async(req,res) => {
     console.log('Scrapping the Classees')
@@ -134,12 +114,15 @@ async function altLogin(user, password, schoolName){
     await page.type('#identification', user)
     await page.type('#ember533', password)
     await page.click('#authn-go-button')
-
     //Wait for Duo auth stuff to load
     await page.waitForTimeout(3000)
     //Click the "send me a push option"
-    await page.click('.positive')
+    if (await page.$('.positive') == null){
+        browser.close()
+        return [false, "Incorrect login info"]
+    }
 
+    await page.click('.positive')
     //You have 90 seconds to tap and approve request on duo phone app
     await page.waitForTimeout(10000)
 
@@ -173,14 +156,14 @@ async function altLogin(user, password, schoolName){
     if (url!= 'https://www.gradescope.com/account') {
         console.log('There was an error corresponding to login information')
         browser.close()
-        return false
+        return [false, "Duo auth failed"]
     }
     //Then we save the cookies so we can load it in other functions rather than constnatly needing to login
     const cookies = await page.cookies()
     await fs.writeFile('./cookies.json', JSON.stringify(cookies, null, 2))
     await page.screenshot({path: "screenshot.png", fullPage: true});
     browser.close()
-    return true
+    return [true, "Login success!"]
 }
 
 
