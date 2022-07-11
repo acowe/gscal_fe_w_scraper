@@ -1,7 +1,14 @@
-import TaskListEntry from "./TaskListEntry";
+import TaskListDay from "./TaskListDay";
 
+// Generates display for the list
 function TaskList(props){
 
+    // An array of arrays where each array element contains the assignments for a particular day for the current week
+    const thisWkDailyAssign = generateThisWkDailyAssign();
+
+    // Organizes the assignments for the current week into assignments for each of the seven days,
+    // then sorts the subarray assignments to be in chronological (ascending) order
+    // and returns organized info as an array of arrays
     function generateThisWkDailyAssign(){
         const assignArr = (props.assignments.length > 0? props.assignments.map((c) => c.filter((a)=> a.dueData.substring(0,3) == "Mar")) : []);
         let fullAssignArr = [];
@@ -20,12 +27,13 @@ function TaskList(props){
         return dayAssArr;
     }
 
+    // (Using selection sort) Sorts the array of assignments into chronological (ascending) order
     function sortAssign(dArr){
         let sorted = (dArr? dArr : [])
         if(sorted.length > 1){
             for(let i = 0; i < sorted.length; i++){
                 for(let j = i+1; j < sorted.length; j++){
-                    let i_time = timeToNum(sorted[i].dueData.substring(10,17)), j_time = timeToNum(sorted[j].dueData.substring(10,17))
+                    let i_time = props.timeToNum(sorted[i].dueData.substring(10,17)), j_time = props.timeToNum(sorted[j].dueData.substring(10,17))
                     if(j_time < i_time){
                         let temp = sorted[j]
                         sorted[j] = sorted[i]
@@ -37,37 +45,23 @@ function TaskList(props){
         return sorted;
     }
 
-
-    function timeToNum(tString){
-        if (tString.length == 0){
-            return 0;
-        }
-        let hourNum = (Number(tString.substring(0,2)) == 12? 0 : Number(tString.substring(0,2)));
-        hourNum = (tString.substring(5,7) == "PM"? hourNum + 12 : hourNum)
-        let minNum = Number(tString.substring(3,5))
-        let timeNum = hourNum + minNum
-        return timeNum
-    }
-
-    const thisWkDailyAssign = generateThisWkDailyAssign();
-
     return(
         <div className={"ms-lg-0 me-lg-5 mx-md-5 mx-3 pb-2 mt-4 mt-lg-0 mb-lg-0 task_card"}>
             <div className={"task_card_contents"}>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"monday"}
-                    assignments={thisWkDailyAssign[0]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"tuesday"}
-                    assignments={thisWkDailyAssign[1]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"wednesday"}
-                    assignments={thisWkDailyAssign[2]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"thursday"}
-                   assignments={thisWkDailyAssign[3]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"friday"}
-                   assignments={thisWkDailyAssign[4]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"saturday"}
-                   assignments={thisWkDailyAssign[5]}/>
-                <TaskListEntry month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"sunday"}
-                   assignments={thisWkDailyAssign[6]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"monday"}
+                             assignments={thisWkDailyAssign[0]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"tuesday"}
+                             assignments={thisWkDailyAssign[1]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"wednesday"}
+                             assignments={thisWkDailyAssign[2]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"thursday"}
+                             assignments={thisWkDailyAssign[3]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"friday"}
+                             assignments={thisWkDailyAssign[4]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"saturday"}
+                             assignments={thisWkDailyAssign[5]}/>
+                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"sunday"}
+                             assignments={thisWkDailyAssign[6]}/>
             </div>
         </div>
     );

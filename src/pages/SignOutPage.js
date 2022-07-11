@@ -1,5 +1,4 @@
-import {Container, Row, Col, Button, Card, Dropdown} from "react-bootstrap";
-
+//The page displayed in place of the Sign-Out page
 function SignOutPage(){
     return(
         <div>
