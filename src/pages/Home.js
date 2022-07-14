@@ -13,7 +13,7 @@ import SideBar from "./components/SideBar";
 // Variables to store information about the current day, week, month, and year
 // Note: To manually change the current day for testing or debugging, you can enter your own year, numerical month, and day as
 // new Date( year_num, month_num-1, date)
-let current = new Date(2022, 3, 3),
+let current = new Date(2022, 2, 1),
     date = current.getDate(), day = current.getDay(),
     month_num = current.getMonth()+1, year = current.getFullYear(),
     current_wk_start = date-day, numDayInMonth = new Date(year, month_num, 0).getDate(),
@@ -110,7 +110,7 @@ function Home(){
 
     // State variables to display login page stuff and hold login information
     const [show, setShow] = useState(false)
-    const [loggedIn, setStatus] = useState(true)
+    const [loggedIn, setStatus] = useState(false)
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('')
     const [passcode, setPasscode] = useState('')
@@ -363,7 +363,7 @@ function Home(){
                             <Calendar assignments={assignments} classes={classes} current_wk_start={current_wk_start} current = {current}
                                       enableEventOn={enableEventOn} eventOn={eventOn} month_num={month_num} num_to_month={num_to_month}
                                       selected={selectedEvent} timeToNum={timeToNum} year={year} />
-                            <div id={"alt_event_card"} className={"pt-3 pb-2 ps-3 pe-1 event_card_alt_true"}>
+                            <div id={"alt_event_card"} className={"pt-3 pb-2 ps-3 pe-2 event_card_alt_true"}>
                                 <h3 id={"aec_title_default"} className={"text-start"}>Select an event to view its details</h3>
                                 <p id={"aec_course"} className={"text-start fs-5 mb-0"}></p>
                                 <p id={"aec_due"} className={"text-start fs-5"}></p>

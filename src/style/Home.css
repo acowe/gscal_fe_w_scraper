@@ -922,10 +922,11 @@
     top:25%;
     /*border: solid #c3cace 1px;*/
     border-radius: 3px;
-    box-shadow: 3px 3px 2px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 7px 3px rgba(0, 0, 0, 0.2);
     cursor: default;
     overflow: visible;
     opacity: 100%;
+    overflow-wrap: break-word;
 }
 
 
