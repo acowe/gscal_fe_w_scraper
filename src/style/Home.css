@@ -319,7 +319,7 @@
 .isToday_true p{
     background-color: #07A2A1;
     font-weight: bold;
-    padding-right: .2rem;
+    padding-right: 3px;
     color: white;
     width: 25px;
     text-align: center;
@@ -490,7 +490,7 @@
 
 
 
-.course_1, .Chemistry, .eventOn_false{
+.course_1, .Chemistry{
     text-align: center;
     padding-left: 1.7rem;
     padding-right: 1.7rem;
@@ -783,6 +783,13 @@
 .form-control{
     margin-left: auto;
     margin-right: auto;
+    width: 25%;
+}
+
+@media (max-width: 599px){
+    .form-control{
+        width: 50%;
+    }
 }
 
 .form-control:focus{
@@ -918,6 +925,7 @@
     box-shadow: 3px 3px 2px 3px rgba(0, 0, 0, 0.2);
     cursor: default;
     overflow: visible;
+    opacity: 100%;
 }
 
 
@@ -1120,13 +1128,7 @@
     }
 }
 
-.eventOn_true{
-    opacity: 50%;
-}
 
-.darkMode_true .eventOn_true{
-    opacity: 30%;
-}
 
 .assign_title{
     overflow-wrap: break-word;
@@ -1293,6 +1295,15 @@
         display: none;
     }
 
+}
+
+
+.eventOn_true{
+    opacity: 60%;
+}
+
+.darkMode_true .eventOn_true{
+    opacity: 30%;
 }
 
 

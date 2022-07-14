@@ -3,7 +3,7 @@ import {Col} from "react-bootstrap";
 function CalDay(props){
 
     // Variables to hold information about the current date and month as well as the course filter
-    const current = new Date(), date = current.getDate(), thisMonth = current.getMonth()+1,
+    const current = new Date(), date = props.current.getDate(), thisMonth = props.current.getMonth()+1,
     dayNum = props.dayNum, courseFilter = props.filter;
 
     // An array containing (chronologically organized) assignments for this calendar day
@@ -20,21 +20,20 @@ function CalDay(props){
             selAssign = (select.length == 0 ? -1 : Number(select.split("a")[1]));
         let month = a.dueData.substring(0,3), timeString = a.dueData.substring(10,17);
         let eventOnStr = ((dayNum === selDay && i === selAssign)? "false" : props.eventOn.toString())
-
-        if (a.name.length != 0){
-            if (courseFilter == "" || a.course == courseFilter){
-                return (<li id={listId} key={i} className={"course_" + courseNum + " eventOn_"+eventOnStr}
+        if (courseFilter == "" || a.course == courseFilter){
+                return (<li id={listId} key={i} className={"course_" + courseNum + " eventOn_" + eventOnStr}
                             onClick={(e)=> eventOn(e.target.id,i)} >
-                    <div id={"d"+listId} className={props.day_of_week + " event_card_false text-start text-wrap"}>
+                    <div id={"d"+listId} className={props.day_of_week + " text-start text-wrap event_card_false"}>
                         <h5>{a.name}</h5>
                         <p className={"my-0 text-start fs-6"}>Course: {a.course}</p>
                         <p className={"mb-1 text-start fs-6"}>Due: {month + " " + props.day_of_month + ", " + timeString}</p>
                     </div>
                     <p id={"p"+listId} className={"to_do_text"} onClick={(e)=> eventOn(e.target.id,i)}>{a.name}</p>
                 </li>);
-            }
         }
+
     });
+
 
 
     // (Using selection sort) Sorts the array of assignments (from props) into chronological (ascending) order
@@ -55,6 +54,8 @@ function CalDay(props){
         }
         return sorted;
     }
+
+    //console.log(dayNum.toString() + ": " + props.assignList)
 
     // Given a course filter, returns the number of assignment events to be displayed
     function filterCount(courseName){
@@ -97,6 +98,8 @@ function CalDay(props){
         return 1;
     }
 
+    console.log(date == props.day_of_month)
+    console.log(thisMonth === props.month)
     return(
         <Col style={{width:"14.28%"}} className={"px-0 " + props.day_type}>
             <div className={"px-1 isToday_" + (date == props.day_of_month && thisMonth === props.month).toString()}>

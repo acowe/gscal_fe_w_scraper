@@ -2,7 +2,7 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
 import {Container, Row, Col, Button, Card, Dropdown} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import '../style/Home.css'
 import NavHead from "./components/NavHead";
 import Calendar from "./components/Calendar";
@@ -13,49 +13,79 @@ import SideBar from "./components/SideBar";
 // Variables to store information about the current day, week, month, and year
 // Note: To manually change the current day for testing or debugging, you can enter your own year, numerical month, and day as
 // new Date( year_num, month_num-1, date)
-const current = new Date(2022, 2, 1),
+let current = new Date(2022, 3, 3),
     date = current.getDate(), day = current.getDay(),
     month_num = current.getMonth()+1, year = current.getFullYear(),
-    current_wk_start = date-day;
+    current_wk_start = date-day, numDayInMonth = new Date(year, month_num, 0).getDate(),
+    numDayInPrevMonth = new Date(year, month_num-1, 0).getDate(),
+    numDayInNextMonth = new Date(year, month_num+1, 0).getDate();
 
+
+function getNextMonth(){
+
+    const isNextYear = month_num + 1 > 12,
+        moNum = (isNextYear? 0 : month_num), yearNum = (isNextYear? year + 1 : year);
+    current = new Date(year, moNum, date)
+
+}
+
+function getPrevMonth(){
+
+    const isLastYear = month_num - 1 < 1,
+        moNum = (isLastYear? 11 : month_num - 2), yearNum = (isLastYear? year - 1 : year);
+    current = new Date(year, moNum, date)
+
+}
 // Converts month number to month name
-function num_to_month(n){
+function num_to_month(n, capAb){
     switch (n) {
         case 1:
-            return "january";
+            const jan = (capAb? "Jan" : "january")
+            return jan;
             break;
         case 2:
-            return "february";
+            const feb = (capAb? "Feb" : "february")
+            return feb;
             break;
         case 3:
-            return "march";
+            const mar = (capAb? "Mar" : "march")
+            return mar;
             break;
         case 4:
-            return "april";
+            const apr = (capAb? "Apr" : "april")
+            return apr
             break;
         case 5:
-            return "may";
+            const may = (capAb? "May" : "may");
+            return may;
             break;
         case 6:
-            return "june";
+            const jun = (capAb? "Jun" : "june");
+            return jun;
             break;
         case 7:
-            return "july";
+            const jul = (capAb? "Jul" : "july");
+            return jul;
             break;
         case 8:
-            return "august";
+            const aug = (capAb? "Aug" : "august");
+            return aug;
             break;
         case 9:
-            return "september";
+            const sept = (capAb? "Sep" : "september");
+            return sept;
             break;
         case 10:
-            return "october";
+            const oct = (capAb? "Oct" : "october");
+            return oct;
             break;
         case 11:
-            return "november";
+            const nov = (capAb? "Nov" : "november");
+            return nov;
             break;
         case 12:
-            return "december";
+            const dec = (capAb? "Dec" : "december");
+            return dec;
             break;
         default:
             return "month";
@@ -83,6 +113,7 @@ function Home(){
     const [loggedIn, setStatus] = useState(true)
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('')
+    const [passcode, setPasscode] = useState('')
     const [error, setError] = useState('')
 
     // State variables to hold scraped course and assignment info
@@ -99,6 +130,10 @@ function Home(){
         setPass(event.target.value)
     }
 
+    const changePasscode = (event) =>{
+        setPasscode(event.target.value)
+    }
+
     const change = (event) => {
         setShow(true)
     }
@@ -113,13 +148,14 @@ function Home(){
     // Given a username and password, logs you into calendar page
     // and provides status of login (loading, fail, and success)
     // (Note: to see login process in more detail, see login and altLogin functions in server.js)
-    async function login(user_in,pass){
+    async function login(user_in,pass,passcode){
         const user = user_in
         const password = pass
+        const pcode = passcode
         const element = document.getElementById("login_status_text");
         element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
         try{
-            const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password);
+            const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password + '&passcode=' + pcode);
             if (message.data == "Successfully logged in"){
                 setShow(true)
                 setStatus(true)
@@ -142,6 +178,7 @@ function Home(){
         const classData = await axios('http://localhost:3001/get_classes')
         const parsed = await parseClasses(classData['data'])
         setClasses(parsed)
+        return parsed;
     }
 
     // Helper to pullClasses function; The primary scraper function that scrapes class info
@@ -167,8 +204,7 @@ function Home(){
         //Then we take all the items with the class courseBox, and since we are only looking in one div it will pull the ones for this
         //sesmester
         $('.courseBox').each((i,elem) => {
-            let num =$(elem).attr('href'), sNam = $(elem).find('.courseBox--shortname').text(),
-                nam =$(elem).find('.courseBox--name').html();
+            let sNam = $(elem).find('.courseBox--shortname').text();
             if(sNam)
             classes.push({
                 number: $(elem).attr('href'),
@@ -183,18 +219,19 @@ function Home(){
     // Assuming class info is already scraped, gets user's scraped assignment information from Gradescope
     // (i.e. gets assignment course, name, submission status, and due date)
     // Should no class info be available prior, no assignment info will be displayed
-    async function getAssignments() {
+    async function getAssignments(classArr) {
         let allAssignments = []
-        for(let i = 0; i< classes.length; i++){
-            if(classes[i].number === 'Loading'){
+        for(let i = 0; i< classArr.length; i++){
+            if(classArr[i].number === 'Loading'){
 
             } else {
-                const data = await axios('http://localhost:3001/get_assignments?id=' + classes[i].number)
-                let parsedData = await parseAssignments(classes[i].name ,data['data'])
+                const data = await axios('http://localhost:3001/get_assignments?id=' + classArr[i].number)
+                let parsedData = await parseAssignments(classArr[i].name ,data['data'])
                 allAssignments.push(parsedData)
             }
         }
         setAssignments(allAssignments)
+        return allAssignments
 
     }
 
@@ -205,10 +242,13 @@ function Home(){
         let assignments = []
 
         $('tr[role=row]').each((i,elem) => {
+            let submissionStat = $(elem).find('.submissionStatus--text').text(),
+                nameText = (submissionStat != "No Submission"? $(elem).find('a').text() :
+                    $(elem).find('.table--primaryLink').text());
             assignments.push({
                 course: className,
-                name: $(elem).find('a').text(),
-                submissionStatus: $(elem).find('.submissionStatus--text').text(),
+                name: nameText,
+                submissionStatus: submissionStat,
                 dueData: $(elem).find('.submissionTimeChart--dueDate').text()
             })
         })
@@ -221,7 +261,7 @@ function Home(){
 
         //For right now all this does is just prints this in the console because i dont want to overflow the page with all my assignments
         // console.log(pog)
-        return(assignments)
+        return assignments;
     }
 
     // Get classes and assignments
@@ -276,18 +316,38 @@ function Home(){
     // Disables event card view mode (ie it makes the event card of a selected event invisible)
     function disableEventOn(){
         if(eventOn){
-            let element = document.getElementById("d"+selectedEvent);
+            let idStr = "d"+selectedEvent
+            let element = document.getElementById(idStr);
             const title_elem = document.getElementById("aec_title_default"),
                 course_elem = document.getElementById("aec_course"),
                 due_elem = document.getElementById("aec_due");
             element.classList.remove("event_card_true");
-            element.classList.add("event_card_false");
+            element.classList.add("event_card_false")
             title_elem.innerText="Select an event to view its details";
             course_elem.innerText = "";
             due_elem.innerText = "";
             setEventOn(false);
         }
     }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    useEffect(() => {
+        // declare the data fetching function
+        if (loggedIn){
+            const classes = async () => {
+                await sleep(2000)
+                const classes = await pullClasses();
+                const assigns = await getAssignments(classes)
+            }
+            // call the function
+            const classArr = classes()
+                // make sure to catch any error
+                .catch(console.error);
+        }
+    }, [loggedIn])
 
     // Display for users that are logged in
     if (loggedIn) {
@@ -300,7 +360,7 @@ function Home(){
                         <div className={"sidebar_" +  sidebarOn.toString() + " sidebar_other"} onClick={(e)=>disableSidebar()}>
                         </div>
                         <Col lg={8} className={"px-0 cal_col"}>
-                            <Calendar assignments={assignments} classes={classes} current_wk_start={current_wk_start}
+                            <Calendar assignments={assignments} classes={classes} current_wk_start={current_wk_start} current = {current}
                                       enableEventOn={enableEventOn} eventOn={eventOn} month_num={month_num} num_to_month={num_to_month}
                                       selected={selectedEvent} timeToNum={timeToNum} year={year} />
                             <div id={"alt_event_card"} className={"pt-3 pb-2 ps-3 pe-1 event_card_alt_true"}>
@@ -316,7 +376,8 @@ function Home(){
                         </Col>
                         <Col lg={4} className={"px-0 pt-lg-4 pt-md-0 list_col"}>
                             <TaskList assignments={assignments} current_wk_start={current_wk_start}
-                                      month_num={month_num} year={year} timeToNum={timeToNum}/>
+                                      month_num={month_num} num_to_month={num_to_month} numDayInMonth={numDayInMonth}
+                                      numDayInNextMonth={numDayInNextMonth} numDayInPrevMonth={numDayInPrevMonth} year={year} timeToNum={timeToNum}/>
                             <div className={"mt-lg-4 dl_button_group"}>
                                 <a href={"/gscal_front_end/#/wk_overview"} className={"mb-3 shadow-none btn btn-primary"}>
                                     view weekly overview</a>
@@ -334,16 +395,20 @@ function Home(){
         return (
             <div>
                 <form className={"m-5"}>
-                    <h1 className = 'top'> Log-in </h1>
+                    <h1 className = 'mb-3 top'> Log-in </h1>
                     <div className = 'mb-3 form-group'>
                         <h3> Username </h3>
-                        <input type = 'text' className = 'form-control w-25' value = {email} placeholder='JohnDoe@gmail.com' onChange={changeEmail}></input>
+                        <input type = 'text' className = 'form-control' value = {email} placeholder='JohnDoe@gmail.com' onChange={changeEmail}></input>
                     </div>
                     <div className = 'mb-5 form-group'>
                         <h3> Password </h3>
-                        <input type = 'password' className = 'form-control w-25' id = 'password' value ={pass} placeholder='pogchamp' onChange={changePass}></input>
+                        <input type = 'password' className = 'form-control' id = 'password' value ={pass} placeholder='pogchamp' onChange={changePass}></input>
                     </div>
-                    <button type="submit" className="mb-5 btn btn-primary w-25" onClick={(e)=>login(email,pass)} >Submit</button>
+                    <div className = 'mb-5 form-group'>
+                        <h4> Duo Passcode </h4>
+                        <input type = 'text' className = 'form-control' id = 'passcode' value ={passcode} placeholder='six or seven-digit code' onChange={changePasscode}></input>
+                    </div>
+                    <button type="submit" className="mb-5 btn btn-primary w-25" onClick={(e)=>login(email,pass,passcode)} >Submit</button>
                     <p id={"login_status_text"} className={"fs-5"}></p>
                 </form>
             </div>

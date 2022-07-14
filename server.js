@@ -23,8 +23,9 @@ app.get('/login', async (req, res) => {
     console.log('Starting to Login')
     const email = req.query.email
     const password = req.query.pass
+    const passcode = req.query.passcode
 
-    const response = await altLogin(email, password, "Harvey Mudd College")
+    const response = await altLogin(email, password, passcode)
 
     if (response[0] == true) {
         res.send('Successfully logged in')
@@ -96,7 +97,8 @@ async function login(email, password) {
 }
 
 //login to Mudd account
-async function altLogin(user, password, schoolName){
+async function altLogin(user, password, passcode){
+    console.log(passcode)
     //First we create a new browser and page instance
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
@@ -114,42 +116,51 @@ async function altLogin(user, password, schoolName){
     await page.type('#identification', user)
     await page.type('#ember533', password)
     await page.click('#authn-go-button')
+
     //Wait for Duo auth stuff to load
-    await page.waitForTimeout(3000)
-    //Click the "send me a push option"
+    await page.waitForTimeout(3000);
+
     if (await page.$('.positive') == null){
         browser.close()
         return [false, "Incorrect login info"]
     }
 
-    await page.click('.positive')
-    //You have 90 seconds to tap and approve request on duo phone app
-    await page.waitForTimeout(10000)
+    if (passcode.length != 0){
+        console.log("passcode option engaged")
+        await page.click('#passcode')
+        await page.type('input[name=factor]', passcode)
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(5000)
+    }
+    else{
+        console.log("push option engaged (default)")
+        //Click the "send me a push option"
+        await page.click('.positive');
+        //You have 90 seconds to tap and approve request on duo phone app
+        await page.waitForTimeout(10000)
 
+    }
     //Alt login w/ Duo passcode
     // (Note: you will need to get working passcode before every run of this function, this is meant for those
     // who don't have Duo mobile app)
-    /*await page.click('#passcode')
+    /* await page.click('#passcode')
     await page.type('input[name=factor]', "PASSCODE_HERE")
     await page.keyboard.press('Enter');
     await page.waitForTimeout(9000)*/
 
-    /* Additional debug methods
-    Screenshot (page provides a screenshot of current display)
-    await page.screenshot({path: "screenshot.png", fullPage: true});
+    //Additional debug methods
+    //Screenshot (page provides a screenshot of current display)
+    /*await page.screenshot({path: "screenshot.png", fullPage: true});*/
 
-    HTML print (console.log HTML layout info (like w/ inspect elements) to terminal)
-    const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-    console.log(data);
-    */
+    // HTML print (console.log HTML layout info (like w/ inspect elements) to terminal)
+    /*const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+    console.log(data);*/
 
     //Get and print url after 90 sec. If login is successful, you should be in Gradescope;
     // If not, you'll probably still be on the Duo auth page.
-    let url = page.url()
-    console.log(url)
 
     await page.goto('https://www.gradescope.com/account')
-    url = page.url()
+    let url = page.url()
 
     //This checks if the url is the account url becuase if so that means that
     //users have sucessfully logged in
@@ -161,7 +172,6 @@ async function altLogin(user, password, schoolName){
     //Then we save the cookies so we can load it in other functions rather than constnatly needing to login
     const cookies = await page.cookies()
     await fs.writeFile('./cookies.json', JSON.stringify(cookies, null, 2))
-    await page.screenshot({path: "screenshot.png", fullPage: true});
     browser.close()
     return [true, "Login success!"]
 }
