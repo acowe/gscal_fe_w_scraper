@@ -110,7 +110,7 @@ function Home(){
 
     // State variables to display login page stuff and hold login information
     const [show, setShow] = useState(false)
-    const [loggedIn, setStatus] = useState(true)
+    const [loggedIn, setStatus] = useState(false)
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('')
     const [passcode, setPasscode] = useState('')
@@ -171,6 +171,39 @@ function Home(){
         }
         //This one logs into gradescope with the following information
 
+    }
+
+    async function altLogin(user_in, pass){
+        // initialToast('Loading')
+        // event.preventDefault()
+        const user = user_in
+        const password = pass
+        const element = document.getElementById("login_status_text");
+        element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
+        try{
+            //this line needs to be changed
+            const message = await axios('https://gscalapi.herokuapp.com' +'/altlogin?email=' + user + '&pass=' + password);
+            if (message.data == "Successfully logged in"){
+                // toast.update(toastId.current, {
+                //     render: message.data,
+                //     type: toast.TYPE.SUCCESS
+                // })
+                setShow(true)
+                setStatus(true)
+            }
+            else{
+                console.log("Login failed, please try again")
+                // toast.update(toastId.current, {
+                //     render: message.data,
+                //     type: toast.TYPE.WARNING
+                // })
+                element.innerHTML = message.data + ", please try again"
+            }
+        }
+        catch (e){
+            console.log("Login failed due to error")
+            element.innerHTML = "Login error"
+        }
     }
 
     // Gets user's scraped class information from Gradescope
@@ -278,6 +311,9 @@ function Home(){
     const [selectedEvent, setSelectedEvent] = useState("");
     const [eventOnFor, setEventOnFor] = useState(-1);
     const [dark, setDark] = useState(false);
+    const [duoAuth, changeMethod1] = useState();
+    const [regular,changeMethod2] = useState();
+    const [duoCode, changeMethod3] = useState();
 
     // Enable sidebar display
     function enableSidebar(){
@@ -332,6 +368,14 @@ function Home(){
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function loginMethod(user_in, pass){
+        if (duoAuth === true){
+            altLogin(user_in, pass)
+        } if (regular === true) {
+            login(user_in, pass)
+        } 
     }
 
     useEffect(() => {
@@ -404,10 +448,31 @@ function Home(){
                         <h3> Password </h3>
                         <input type = 'password' className = 'form-control' id = 'password' value ={pass} placeholder='pogchamp' onChange={changePass}></input>
                     </div>
-                    <div className = 'mb-5 form-group'>
-                        <h4> Duo Passcode </h4>
-                        <input type = 'text' className = 'form-control' id = 'passcode' value ={passcode} placeholder='six or seven-digit code' onChange={changePasscode}></input>
+
+                    <div className = 'form-check'>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange = {(e) => {changeMethod2(true);changeMethod1(false);changeMethod3(false)}}></input>
+                        <label class="form-check-label" for="flexRadioCheckedDisabled">Regular Login</label>
+
                     </div>
+
+                    <div class = 'form-check'>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange={(e) => {changeMethod1(false);changeMethod2(true);changeMethod3(false)}}></input>
+                        <label class="form-check-label" for="flexRadioCheckedDisabled">Duo Authentication</label>
+                    </div>
+
+                    <div class = 'form-check'>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange={(e) => {changeMethod1(false);changeMethod2(false);changeMethod3(true)}}></input>
+                        <label class="form-check-label" for="flexRadioCheckedDisabled">Duo Passcode</label>
+                    </div>
+
+
+                    {duoCode === true &&(
+                        <div className = 'mb-5 form-group'>
+                            <h4> Duo Passcode </h4>
+                            <input type = 'text' className = 'form-control' id = 'passcode' value ={passcode} placeholder='six or seven-digit code' onChange={changePasscode}></input>
+                        </div>
+                    )}
+
                     <button type="submit" className="mb-5 btn btn-primary w-25" onClick={(e)=>login(email,pass,passcode)} >Submit</button>
                     <p id={"login_status_text"} className={"fs-5"}></p>
                 </form>
