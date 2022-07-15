@@ -1,9 +1,13 @@
 // Default calendar page
 import axios from 'axios'
 import cheerio from 'cheerio'
+import {TaostContainer, toast, ToastContainer} from 'react-toastify'
 import {Container, Row, Col, Button, Card, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
+import React from 'react'
 import '../style/Home.css'
+import 'react-toastify/dist/ReactToastify.css'
+
 import NavHead from "./components/NavHead";
 import Calendar from "./components/Calendar";
 import TaskList from "./components/TaskList";
@@ -138,6 +142,30 @@ function Home(){
         setShow(true)
     }
 
+    const toastId = React.useRef(null)
+
+    const initialToast = (message, duration, type) => {
+    switch (type){
+        case "succesful":
+            toastId.current = toast(message, {type: toast.TYPE.SUCCESS, autoClose: {duration}})
+            break
+        case "info":
+            toastId.current = toast(message, {type: toast.TYPE.INFO, autoClose: {duration}})
+            break
+        case "error":
+            toastId.current = toast(message, {type: toast.TYPE.ERROR, autoClose: {duration}})
+            break
+        default: 
+            toastId.current = toast(message, {type: toast.TYPE.WARNING, autoClose: {duration}})
+            break
+    }
+    }
+
+    function resetToast(){
+        toastId.current = toast.dismiss()
+    }
+
+
 //____________________API functions here_______________________
 
 
@@ -149,18 +177,29 @@ function Home(){
     // and provides status of login (loading, fail, and success)
     // (Note: to see login process in more detail, see login and altLogin functions in server.js)
     async function login(user_in,pass,passcode){
+        initialToast("Loading", 15000, 'info')
         const user = user_in
         const password = pass
         const pcode = passcode
         const element = document.getElementById("login_status_text");
         element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
         try{
-            const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password + '&passcode=' + pcode);
+            //http://localhost:3001
+            const message = await axios('https://gscalapi.herokuapp.com/login?email=' + user + '&pass=' + password + '&passcode=' + pcode);
             if (message.data == "Successfully logged in"){
+                toast.update(toastId.current, {
+                    render: message.data,
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 20
+                })
                 setShow(true)
                 setStatus(true)
             }
             else{
+                toast.update(toastId.current, {
+                    render: message.data,
+                    type: toast.TYPE.WARNING
+                })
                 console.log("Login failed, please try again")
                 element.innerHTML = message.data + ", please try again"
             }
@@ -184,19 +223,19 @@ function Home(){
             //this line needs to be changed
             const message = await axios('https://gscalapi.herokuapp.com' +'/altlogin?email=' + user + '&pass=' + password);
             if (message.data == "Successfully logged in"){
-                // toast.update(toastId.current, {
-                //     render: message.data,
-                //     type: toast.TYPE.SUCCESS
-                // })
+                toast.update(toastId.current, {
+                    render: message.data,
+                    type: toast.TYPE.SUCCESS
+                })
                 setShow(true)
                 setStatus(true)
             }
             else{
                 console.log("Login failed, please try again")
-                // toast.update(toastId.current, {
-                //     render: message.data,
-                //     type: toast.TYPE.WARNING
-                // })
+                toast.update(toastId.current, {
+                    render: message.data,
+                    type: toast.TYPE.WARNING
+                })
                 element.innerHTML = message.data + ", please try again"
             }
         }
@@ -208,9 +247,16 @@ function Home(){
 
     // Gets user's scraped class information from Gradescope
     async function pullClasses(){
-        const classData = await axios('http://localhost:3001/get_classes')
+
+
+        const classData = await axios('https://gscalapi.herokuapp.com/get_classes')
         const parsed = await parseClasses(classData['data'])
         setClasses(parsed)
+        toast.update(toastId.current, {
+            render: 'Sucesfully got the classes',
+            type: toast.TYPE.SUCCESS,
+            autoClose: 10
+        })
         return parsed;
     }
 
@@ -258,7 +304,7 @@ function Home(){
             if(classArr[i].number === 'Loading'){
 
             } else {
-                const data = await axios('http://localhost:3001/get_assignments?id=' + classArr[i].number)
+                const data = await axios('https://gscalapi.herokuapp.com/get_assignments?id=' + classArr[i].number)
                 let parsedData = await parseAssignments(classArr[i].name ,data['data'])
                 allAssignments.push(parsedData)
             }
@@ -311,9 +357,9 @@ function Home(){
     const [selectedEvent, setSelectedEvent] = useState("");
     const [eventOnFor, setEventOnFor] = useState(-1);
     const [dark, setDark] = useState(false);
-    const [duoAuth, changeMethod1] = useState();
-    const [regular,changeMethod2] = useState();
-    const [duoCode, changeMethod3] = useState();
+    const [duoAuth, changeMethod1] = useState(true);
+    const [regular,changeMethod2] = useState(false);
+    const [duoCode, changeMethod3] = useState(false);
 
     // Enable sidebar display
     function enableSidebar(){
@@ -381,6 +427,7 @@ function Home(){
     useEffect(() => {
         // declare the data fetching function
         if (loggedIn){
+            sleep(10)
             const classes = async () => {
                 await sleep(2000)
                 const classes = await pullClasses();
@@ -426,6 +473,7 @@ function Home(){
                                 <a href={"/gscal_front_end/#/wk_overview"} className={"mb-3 shadow-none btn btn-primary"}>
                                     view weekly overview</a>
                             </div>
+                            <ToastContainer/>
                         </Col>
                     </Row>
                     <Row className={"cover_up"}>
@@ -450,18 +498,18 @@ function Home(){
                     </div>
 
                     <div className = 'form-check'>
-                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange = {(e) => {changeMethod2(true);changeMethod1(false);changeMethod3(false)}}></input>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' checked={duoAuth} onChange = {(e) => {changeMethod2(true);changeMethod1(false);changeMethod3(false)}}></input>
                         <label class="form-check-label" for="flexRadioCheckedDisabled">Regular Login</label>
 
                     </div>
 
                     <div class = 'form-check'>
-                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange={(e) => {changeMethod1(false);changeMethod2(true);changeMethod3(false)}}></input>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' checked={regular} onChange={(e) => {changeMethod1(false);changeMethod2(true);changeMethod3(false)}}></input>
                         <label class="form-check-label" for="flexRadioCheckedDisabled">Duo Authentication</label>
                     </div>
 
                     <div class = 'form-check'>
-                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' onChange={(e) => {changeMethod1(false);changeMethod2(false);changeMethod3(true)}}></input>
+                        <input class = 'form-check-input' type='radio' name='DuoAuth' id='inlineCheckbox1' checked={duoCode} onChange={(e) => {changeMethod1(false);changeMethod2(false);changeMethod3(true)}}></input>
                         <label class="form-check-label" for="flexRadioCheckedDisabled">Duo Passcode</label>
                     </div>
 
@@ -475,6 +523,7 @@ function Home(){
 
                     <button type="submit" className="mb-5 btn btn-primary w-25" onClick={(e)=>login(email,pass,passcode)} >Submit</button>
                     <p id={"login_status_text"} className={"fs-5"}></p>
+                    <ToastContainer/>
                 </form>
             </div>
         );
