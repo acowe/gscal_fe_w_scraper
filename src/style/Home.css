@@ -1306,5 +1306,10 @@
     opacity: 30%;
 }
 
+.form-check .form-check-input{
+    float: none;
+}
 
-
+.testing{
+    border: 3px;
+}
