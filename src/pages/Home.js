@@ -185,7 +185,7 @@ function Home(){
         element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
         try{
             //http://localhost:3001
-            const message = await axios('https://gscalapi.herokuapp.com/login?email=' + user + '&pass=' + password + '&passcode=' + pcode);
+            const message = await axios('http://localhost:3001/login?email=' + user + '&pass=' + password + '&passcode=' + pcode);
             if (message.data == "Successfully logged in"){
                 toast.update(toastId.current, {
                     render: message.data,
@@ -221,7 +221,7 @@ function Home(){
         element.innerHTML = "Logging in... (be on the lookout for a duo notification!)"
         try{
             //this line needs to be changed
-            const message = await axios('https://gscalapi.herokuapp.com' +'/altlogin?email=' + user + '&pass=' + password);
+            const message = await axios('http://localhost:3001/altlogin?email=' +'/altlogin?email=' + user + '&pass=' + password);
             if (message.data == "Successfully logged in"){
                 toast.update(toastId.current, {
                     render: message.data,
@@ -249,7 +249,7 @@ function Home(){
     async function pullClasses(){
 
 
-        const classData = await axios('https://gscalapi.herokuapp.com/get_classes')
+        const classData = await axios('http://localhost:3001/get_classes')
         const parsed = await parseClasses(classData['data'])
         setClasses(parsed)
         toast.update(toastId.current, {
@@ -304,7 +304,7 @@ function Home(){
             if(classArr[i].number === 'Loading'){
 
             } else {
-                const data = await axios('https://gscalapi.herokuapp.com/get_assignments?id=' + classArr[i].number)
+                const data = await axios('http://localhost:3001/get_assignments?id=' + classArr[i].number)
                 let parsedData = await parseAssignments(classArr[i].name ,data['data'])
                 allAssignments.push(parsedData)
             }
