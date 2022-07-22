@@ -6,13 +6,14 @@ import OtherPage from "./pages/OtherPage";
 import NoPage from "./pages/NoPage";
 import SignOutPage from "./pages/SignOutPage";
 import {useEffect} from "react";
+import WeeklyOverview from './pages/WeeklyOvrvw';
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path={"/home"} element={<Home />}/>
-        <Route path={"/wk_overview"} element={<OtherPage />}/>
+        <Route path={"/wk_overview"} element={<WeeklyOverview />}/>
         <Route path={"/sign_out"} element={<SignOutPage />}/>
         <Route path={"*"} element={<Navigate to="/home"/>}/>
       </Routes>
