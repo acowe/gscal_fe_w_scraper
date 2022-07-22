@@ -19,16 +19,16 @@ function CalDay(props){
             selDay = (select.length == 0 ? -1 : Number(select.split("a")[0])),
             selAssign = (select.length == 0 ? -1 : Number(select.split("a")[1]));
         let month = a.dueData.substring(0,3), timeString = a.dueData.substring(10,17);
-        let eventOnStr = ((dayNum === selDay && i === selAssign)? "false" : props.eventOn.toString())
+        let isEventOn = (!props.eventOn || (dayNum === selDay && i === selAssign)? "" : "_eventOn");
         if (courseFilter == "" || a.course == courseFilter){
-                return (<li id={listId} key={i} className={"course_" + courseNum + " eventOn_" + eventOnStr}
+                return (<li id={listId} key={i} className={"course_" + courseNum + isEventOn}
                             onClick={(e)=> eventOn(e.target.id,i)} >
                     <div id={"d"+listId} className={props.day_of_week + " text-start text-wrap event_card_false"}>
                         <h5>{a.name}</h5>
                         <p className={"my-0 text-start fs-6"}>Course: {a.course}</p>
                         <p className={"mb-1 text-start fs-6"}>Due: {month + " " + props.day_of_month + ", " + timeString}</p>
                     </div>
-                    <p id={"p"+listId} className={"to_do_text"} onClick={(e)=> eventOn(e.target.id,i)}>{a.name}</p>
+                    <p id={"p"+listId} className={"to_do_text" + isEventOn} onClick={(e)=> eventOn(e.target.id,i)}>{a.name}</p>
                 </li>);
         }
 
@@ -73,6 +73,7 @@ function CalDay(props){
     function eventOn(id, ind){
         if (!props.eventOn){
             let course = assigns[ind].course, month = assigns[ind].dueData.substring(0,3), timeString = assigns[ind].dueData.substring(10,17);
+            console.log(id)
             let idStr = (id.charAt(0) == "p" ? id.substring(1) : id);
             const element2 = document.getElementById("d"+idStr);
             element2.classList.remove("event_card_false");
@@ -98,8 +99,6 @@ function CalDay(props){
         return 1;
     }
 
-    console.log(date == props.day_of_month)
-    console.log(thisMonth === props.month)
     return(
         <Col style={{width:"14.28%"}} className={"px-0 " + props.day_type}>
             <div className={"px-1 isToday_" + (date == props.day_of_month && thisMonth === props.month).toString()}>

@@ -32,7 +32,7 @@ function day_to_num(d){
 function TaskListDay(props){
 
     // Variables to hold information about the current day
-    const current = new Date(), today = (current.getDay() == 0? 7: current.getDay());
+    const current = props.current, today = (current.getDay() == 0? 7: current.getDay());
     const entryDayNum = day_to_num(props.dayOfWeek);
     const dayPassed = (entryDayNum < today? true: false);
     const isToday = (entryDayNum == today? true : false);
@@ -40,9 +40,11 @@ function TaskListDay(props){
 
 
     function isPast(time){
+        let hr = ((time.substring(5,7) == "PM")? Number(time.substring(0,2)) + 12 : Number(time.substring(0,2))),
+            min = Number(time.substring(3,5));
         if (isToday){
-            if (time.getHours() < current.getHours()){
-                if (time.getMinutes() < current.getMinutes()){
+            if (hr < current.getHours()){
+                if (min < current.getMinutes()){
                     return true;
                 }
                 else{
@@ -57,11 +59,13 @@ function TaskListDay(props){
     };
 
     // Display variable to generate the lists for each day within the greater list
+    //passed.toString()
     const displayDue =
         props.assignments.map((a,i) =>
             {
                 let timeString = a.dueData.substring(10,17);
-                return (<li className={"passed_false"}>
+                let passed = isPast(timeString).toString();
+                return (<li className={"passed_" + passed}>
                     <div className={"list_content"}>
                         <div className={"course_text"}>{a.course}</div>
                         <div className={"list_time"}>

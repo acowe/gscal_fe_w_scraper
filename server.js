@@ -24,8 +24,9 @@ app.get('/login', async (req, res) => {
     const email = req.query.email
     const password = req.query.pass
     const passcode = req.query.passcode
+    const sc = req.query.sc
 
-    const response = await altLogin(email, password, passcode)
+    const response = await altLogin(email, password, passcode, sc)
 
     if (response[0] == true) {
         res.send('Successfully logged in')
@@ -64,6 +65,18 @@ app.get('/get_assignments', async(req, res) => {
     res.send(data)
 })
 
+app.get('/get_user', async(req, res) => {
+    console.log('Scrapping the user name')
+    const course_id = req.query.c
+    const data = await get_user(course_id)
+    if (data==false){
+        res.statusCode = 201
+        res.send('There was an error scrapping name')
+    }
+    // classes = await parseClasses(data['data'])
+    res.send(data)
+})
+
 
 //Scrapping Functions 
 async function login(email, password) {
@@ -97,8 +110,13 @@ async function login(email, password) {
 }
 
 //login to Mudd account
-async function altLogin(user, password, passcode){
-    console.log(passcode)
+async function altLogin(user, password, passcode, sc){
+    let pw = password
+    if(sc == "y" && (pw.includes("{") || pw.includes("[") || pw.includes("("))){
+        pw = pw.replace("{", "&");
+        pw = pw.replace("[", "#");
+        pw = pw.replace("(", "+");
+    }
     //First we create a new browser and page instance
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
@@ -118,9 +136,10 @@ async function altLogin(user, password, passcode){
     await page.click('#authn-go-button')
 
     //Wait for Duo auth stuff to load
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(5000);
 
     if (await page.$('.positive') == null){
+        await page.screenshot({path: "screenshot.png", fullPage: true});
         browser.close()
         return [false, "Incorrect login info"]
     }
@@ -216,6 +235,28 @@ async function get_assignments(id) {
     }
 }
 
+
+async function get_user(c) {
+    try {
+        const cookiesString = await fs.readFile('./cookies.json')
+        const cookies = JSON.parse(cookiesString)
+        console.log(c)
+        const browser = await puppeteer.launch()
+        const page = await browser.newPage()
+        await page.setCookie(...cookies)
+        await page.goto('https://www.gradescope.com/account/edit')
+        //Additional debug methods
+        //Screenshot (page provides a screenshot of current display)
+        await page.screenshot({path: "screenshot_acc.png", fullPage: true});
+        const data = await page.evaluate(() => document.documentElement.outerHTML)
+        browser.close()
+        // console.log(data)
+        return data
+    } catch(e) {
+        console.log(e)
+        return false
+    }
+}
 //Parsing Functions 
 
 

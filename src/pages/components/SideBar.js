@@ -2,7 +2,7 @@ function SideBar(props){
     return(
         <div id={"darkMode_" + props.dark.toString()} className={"sidebar_" + props.sidebarOn.toString() + " sidebar"}>
             <img className={"mt-4 mb-3 rounded-circle profile_img"} src={"https://icon-library.com/images/anonymous-user-icon/anonymous-user-icon-2.jpg"}></img>
-            <h3 className={"mb-4"}>Student</h3>
+            <h3 className={"mb-4"}>{props.uName}</h3>
             <ul className={"sidebar_options"}>
                 <li className={"mb-3 fs-5"}>My Profile</li>
                 <li className={"mb-3 fs-5"}>Settings</li>
