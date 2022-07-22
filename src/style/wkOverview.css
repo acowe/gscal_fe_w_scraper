@@ -689,6 +689,7 @@ background-color:black;
   background-color: #03A3A1;
   height: 200vh;
   flex-direction: column;
+  text-align:left;
 }
 
 /* NAVBAR CSS START */

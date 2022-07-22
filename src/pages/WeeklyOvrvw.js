@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import moment from 'moment';
 import axios from 'axios';
 import cheerio from 'cheerio';
+import 'bootstrap/dist/css/bootstrap.css';
 import cx from 'classnames';
 import '../style/wkOverview.css'
 
@@ -395,8 +396,10 @@ function WeeklyOverview(){
 
     // ------------------- WEEKLY OVERVIEW HTML ------------------- //
 
-    return (  
-        <div>
+    return (
+        <div className = "wrapper">
+            
+            <div>
             <div className = "bodyContainer row">
                 <div className = "secondaryBodyContainer col-lg-8 col-xl-8">
                     <div className = "weekly-overview">
@@ -576,6 +579,7 @@ function WeeklyOverview(){
 
 
             </div>
+        </div>
         </div>
     </div>
            
