@@ -139,11 +139,14 @@ function Calendar(props){
                 }
                 filteredArr.push(filteredCArr)
             })
+            let calArr = []
             filteredArr.map((c)=> {
+                let calSubArr = [];
                 for(let i=0; i < c.length; i++){
                     const mo = month_to_num(c[i].dueData.substring(0,3)), date = Number(c[i].dueData.substring(4,6));
                     if (mo == startOfMonth[1]){
                         if(date >= startOfMonth[0]){
+                            calSubArr.push(c[i]);
                             retArr.push(c[i]);
                         }
                         else{
@@ -152,15 +155,22 @@ function Calendar(props){
                     }
                     else if(mo == endOfMonth[1]){
                         if(date <= endOfMonth[0]){
+                            calSubArr.push(c[i]);
                             retArr.push(c[i]);
                         }
                     }
                     else {
                         if(mo > startOfMonth[1] && mo < endOfMonth[1]){
+                            calSubArr.push(c[i]);
                             retArr.push(c[i]);
                         }
                     }
-                }})
+                }
+                console.log(calSubArr)
+               calArr.push(calSubArr)
+            })
+            console.log(calArr)
+            props.getAnAssignArray(calArr)
         }
         return retArr
     }

@@ -69,7 +69,6 @@ function TaskList(props){
             }
             wkDates.push([dateEntry,month]);
         }
-        console.log(wkDates)
         return wkDates;
     }
 
@@ -140,7 +139,6 @@ function TaskList(props){
                     }
                 }
             }})
-        console.log(fullAssignArr)
         let dayAssArr = [];
         for (let i = 0; i<7; i++){
             let dArr = [];
@@ -176,19 +174,19 @@ function TaskList(props){
     return(
         <div className={"ms-lg-0 me-lg-5 mx-md-5 mx-3 pb-2 mt-4 mt-lg-0 mb-lg-0 task_card"}>
             <div className={"task_card_contents"}>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"monday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"monday"}
                              assignments={thisWkDailyAssign[0]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"tuesday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"tuesday"}
                              assignments={thisWkDailyAssign[1]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"wednesday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"wednesday"}
                              assignments={thisWkDailyAssign[2]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"thursday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"thursday"}
                              assignments={thisWkDailyAssign[3]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"friday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"friday"}
                              assignments={thisWkDailyAssign[4]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"saturday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"saturday"}
                              assignments={thisWkDailyAssign[5]}/>
-                <TaskListDay month_num={props.month_num} year={props.year} current_wk_start={props.current_wk_start} dayOfWeek={"sunday"}
+                <TaskListDay month_num={props.month_num} year={props.year} current={props.current} current_wk_start={props.current_wk_start} dayOfWeek={"sunday"}
                              assignments={thisWkDailyAssign[6]}/>
             </div>
         </div>

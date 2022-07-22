@@ -382,6 +382,17 @@
     overflow-x: scroll;
 }
 
+.to_do_text_eventOn{
+    margin-bottom: 0;
+    overflow-x: scroll;
+    color: #919294;
+}
+
+.darkMode_true .to_do_text_eventOn{
+    margin-bottom: 0;
+    overflow-x: scroll;
+    color: #313B3C;
+}
 
 
 .event_card_alt_true{
@@ -497,12 +508,27 @@
     background-color: #07A2A1;
 }
 
+.course_1_eventOn{
+    background-color: #98D1D1;
+}
+
+.darkMode_true .course_1_eventOn{
+    background-color: #356160;
+}
 
 .course_2, .Math{
     text-align: center;
     padding-left: 1.7rem;
     padding-right: 1.7rem;
     background-color: #FF904D;
+}
+
+.course_2_eventOn{
+    background-color: #FFC9A8;
+}
+
+.darkMode_true .course_2_eventOn{
+    background-color: #755C48;
 }
 
 .course_3, .Phys{
@@ -513,6 +539,15 @@
 
 }
 
+.course_3_eventOn{
+    background-color: #AAE2E2;
+}
+
+.darkMode_true .course_3_eventOn{
+    background-color: #3E6B6A;
+}
+
+
 .course_4, .Bio{
     text-align: center;
     padding-left: 1.7rem;
@@ -520,11 +555,27 @@
     background-color: #59d7dc;
 }
 
+.course_4_eventOn{
+    background-color: #B2EBEE
+}
+
+.darkMode_true .course_3_eventOn{
+    background-color: #457071;
+}
+
 .course_5, .CS60{
     text-align: center;
     padding-left: 1.7rem;
     padding-right: 1.7rem;
     background-color: #b5c5c5;
+}
+
+.course_5_eventOn{
+    background-color: #DAE2E2
+}
+
+.darkMode_true .course_5_eventOn{
+    background-color: #5D6A6B;
 }
 
 .course_6, .E79{
@@ -535,6 +586,14 @@
 
 }
 
+.course_6_eventOn{
+    background-color: #FFE2A4
+}
+
+.darkMode_true .course_6_eventOn{
+    background-color: #736A46;
+}
+
 .course_7 , .CS124{
     text-align: center;
     padding-left: 1.7rem;
@@ -542,6 +601,18 @@
     background-color: #4ba7bd;
 
 }
+
+.course_7_eventOn{
+    background-color: #A9D3DE
+}
+
+.darkMode_true .course_7_eventOn{
+    background-color: #3F6268;
+}
+
+
+
+
 
 .list_col{
     height: 100vh;
@@ -925,7 +996,6 @@
     box-shadow: 3px 3px 7px 3px rgba(0, 0, 0, 0.2);
     cursor: default;
     overflow: visible;
-    opacity: 100%;
     overflow-wrap: break-word;
 }
 
@@ -1299,13 +1369,9 @@
 }
 
 
-.eventOn_true{
-    opacity: 60%;
-}
 
-.darkMode_true .eventOn_true{
-    opacity: 30%;
-}
+
+
 
 
 
