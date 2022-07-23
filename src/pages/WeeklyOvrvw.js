@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import AssgnList from './components/AssgnList';
 import {Link} from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
 import cheerio from 'cheerio';
-import 'bootstrap/dist/css/bootstrap.css';
 import cx from 'classnames';
 import '../style/wkOverview.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 
 
 function WeeklyOverview(){
 
+    
+
+    
 // ---------  Controls the date and time for this component ------------ //
 
     const [currentTime, setCurrentTime] = useState(moment().format('h:mm A')); // current time
@@ -43,6 +47,8 @@ function WeeklyOverview(){
     },60000)
    
 
+    
+
 // --------------- GRADESCOPE SCRAPING FUNCTIONS ----------------- //
 
 
@@ -56,6 +62,7 @@ function WeeklyOverview(){
     // Holds the class and assignment data from Gradescope
     const [assignments, setAssignments] = useState([])
     const [classes, setClasses] = useState([])
+    
 
 
     var showPassword = false
@@ -396,9 +403,8 @@ function WeeklyOverview(){
 
     // ------------------- WEEKLY OVERVIEW HTML ------------------- //
 
-    return (
+    return (  
         <div className = "wrapper">
-            
             <div>
             <div className = "bodyContainer row">
                 <div className = "secondaryBodyContainer col-lg-8 col-xl-8">

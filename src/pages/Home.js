@@ -1,6 +1,7 @@
 // Default calendar page
 import axios from 'axios'
 import cheerio from 'cheerio'
+import {Link} from 'react-router-dom'
 import {Container, Row, Col, Button, Card, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import '../style/Home.css'
@@ -681,8 +682,8 @@ function Home(){
                                       numDayInNextMonth={numDayInNextMonth} numDayInPrevMonth={numDayInPrevMonth} year={year} timeToNum={timeToNum}
                                       current = {current}/>
                             <div className={"mt-lg-4 dl_button_group"}>
-                                <a href={"/gscal_front_end/#/wk_overview"} className={"mb-3 shadow-none btn btn-primary"}>
-                                    view weekly overview</a>
+                                <Link to={"../wk_overview"} className={"mb-3 shadow-none btn btn-primary"}>
+                                    view weekly overview</Link>
                             </div>
                         </Col>
                     </Row>
