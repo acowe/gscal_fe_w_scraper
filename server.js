@@ -138,7 +138,7 @@ async function altLogin(user, password, passcode, sc){
     //Wait for Duo auth stuff to load
     await page.waitForTimeout(5000);
 
-    if (await page.$('.positive') == null){
+     if (await page.$('#trust-browser-button') == null){
         await page.screenshot({path: "screenshot.png", fullPage: true});
         browser.close()
         return [false, "Incorrect login info"]
@@ -154,7 +154,7 @@ async function altLogin(user, password, passcode, sc){
     else{
         console.log("push option engaged (default)")
         //Click the "send me a push option"
-        await page.click('.positive');
+        await page.click('#trust-browser-button');
         //You have 90 seconds to tap and approve request on duo phone app
         await page.waitForTimeout(10000)
 
