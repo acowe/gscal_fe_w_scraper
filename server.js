@@ -136,7 +136,7 @@ async function altLogin(user, password, passcode, sc){
     await page.click('#authn-go-button')
 
     //Wait for Duo auth stuff to load
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(10000);
 
      if (await page.$('#trust-browser-button') == null){
         await page.screenshot({path: "screenshot.png", fullPage: true});
